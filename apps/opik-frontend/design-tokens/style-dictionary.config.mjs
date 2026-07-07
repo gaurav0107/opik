@@ -24,7 +24,11 @@ export default {
   platforms: {
     css: {
       transformGroup: "css",
-      transforms: ["name/kebab", "typography/css/shorthand", "shadow/css/shorthand"],
+      transforms: [
+        "name/kebab",
+        "typography/css/shorthand",
+        "shadow/css/shorthand",
+      ],
       buildPath: "src/styles/",
       files: [
         {

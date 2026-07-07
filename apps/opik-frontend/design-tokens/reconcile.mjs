@@ -60,7 +60,9 @@ function parseRootBlock(source) {
 function hexToRgb(hex) {
   const value = hex.replace("#", "");
   if (value.length < 6) return null;
-  return [0, 2, 4].map((offset) => parseInt(value.slice(offset, offset + 2), 16));
+  return [0, 2, 4].map((offset) =>
+    parseInt(value.slice(offset, offset + 2), 16),
+  );
 }
 
 function hslToRgb(h, s, l) {
@@ -84,9 +86,7 @@ function hslToRgb(h, s, l) {
 
 function cssValueToRgb(value) {
   if (value.startsWith("#")) return hexToRgb(value);
-  const hslTriple = value.match(
-    /^([\d.]+)[,\s]+([\d.]+)%[,\s]+([\d.]+)%$/,
-  );
+  const hslTriple = value.match(/^([\d.]+)[,\s]+([\d.]+)%[,\s]+([\d.]+)%$/);
   if (hslTriple) {
     return hslToRgb(
       parseFloat(hslTriple[1]),
@@ -101,7 +101,8 @@ function flattenColors(node, prefix = []) {
   const out = {};
   for (const [key, value] of Object.entries(node)) {
     if (value && typeof value === "object" && "$value" in value) {
-      if (value.$type === "color") out[[...prefix, key].join(".")] = value.$value;
+      if (value.$type === "color")
+        out[[...prefix, key].join(".")] = value.$value;
     } else if (value && typeof value === "object") {
       Object.assign(out, flattenColors(value, [...prefix, key]));
     }
@@ -125,34 +126,61 @@ for (const [figmaPath, figmaValue] of Object.entries(figmaColors)) {
   const figmaRgb = hexToRgb(figmaValue);
   const codeRgb = cssValueToRgb(codeVars[codeVar]);
   if (!figmaRgb || !codeRgb) {
-    rows.mismatch.push({ figmaPath, figmaValue, codeVar, codeValue: codeVars[codeVar], note: "unparsed" });
+    rows.mismatch.push({
+      figmaPath,
+      figmaValue,
+      codeVar,
+      codeValue: codeVars[codeVar],
+      note: "unparsed",
+    });
     continue;
   }
-  const delta = Math.max(...figmaRgb.map((channel, index) => Math.abs(channel - codeRgb[index])));
-  const entry = { figmaPath, figmaValue, codeVar, codeValue: codeVars[codeVar], delta };
+  const delta = Math.max(
+    ...figmaRgb.map((channel, index) => Math.abs(channel - codeRgb[index])),
+  );
+  const entry = {
+    figmaPath,
+    figmaValue,
+    codeVar,
+    codeValue: codeVars[codeVar],
+    delta,
+  };
   if (delta <= 2) rows.match.push(entry);
   else rows.mismatch.push(entry);
 }
 
 const mappedCodeVars = new Set(
-  [...Object.values(FIGMA_TO_CODE), ...Object.values(UNRESOLVED_FIGMA_STYLES)].filter(Boolean),
+  [
+    ...Object.values(FIGMA_TO_CODE),
+    ...Object.values(UNRESOLVED_FIGMA_STYLES),
+  ].filter(Boolean),
 );
-const unmappedCodeVars = Object.keys(codeVars).filter((name) => !mappedCodeVars.has(name));
+const unmappedCodeVars = Object.keys(codeVars).filter(
+  (name) => !mappedCodeVars.has(name),
+);
 
 const lines = [];
 lines.push("# Token reconciliation: Figma styles vs src/main.scss (:root)");
 lines.push("");
 lines.push(`- Figma color tokens exported: ${Object.keys(figmaColors).length}`);
-lines.push(`- main.scss :root custom properties: ${Object.keys(codeVars).length}`);
+lines.push(
+  `- main.scss :root custom properties: ${Object.keys(codeVars).length}`,
+);
 lines.push("");
 lines.push(`## Matches (channel delta <= 2): ${rows.match.length}`);
 for (const row of rows.match) {
-  lines.push(`- ${row.figmaPath} ${row.figmaValue} == ${row.codeVar}: ${row.codeValue} (delta ${row.delta})`);
+  lines.push(
+    `- ${row.figmaPath} ${row.figmaValue} == ${row.codeVar}: ${row.codeValue} (delta ${row.delta})`,
+  );
 }
 lines.push("");
 lines.push(`## Mismatches: ${rows.mismatch.length}`);
 for (const row of rows.mismatch) {
-  lines.push(`- ${row.figmaPath} ${row.figmaValue} != ${row.codeVar}: ${row.codeValue}${row.delta !== undefined ? ` (delta ${row.delta})` : ""}${row.note ? ` [${row.note}]` : ""}`);
+  lines.push(
+    `- ${row.figmaPath} ${row.figmaValue} != ${row.codeVar}: ${row.codeValue}${
+      row.delta !== undefined ? ` (delta ${row.delta})` : ""
+    }${row.note ? ` [${row.note}]` : ""}`,
+  );
 }
 lines.push("");
 lines.push(`## In Figma but missing in code: ${rows.missingInCode.length}`);
@@ -160,12 +188,22 @@ for (const row of rows.missingInCode) {
   lines.push(`- ${row.figmaPath} ${row.figmaValue}`);
 }
 lines.push("");
-lines.push(`## Figma styles identified but value not exported (MCP limit; need REST export): ${Object.keys(UNRESOLVED_FIGMA_STYLES).length}`);
+lines.push(
+  `## Figma styles identified but value not exported (MCP limit; need REST export): ${
+    Object.keys(UNRESOLVED_FIGMA_STYLES).length
+  }`,
+);
 for (const [styleName, codeVar] of Object.entries(UNRESOLVED_FIGMA_STYLES)) {
-  lines.push(`- ${styleName} -> expected counterpart ${codeVar}: ${codeVars[codeVar] ?? "(no code var)"}`);
+  lines.push(
+    `- ${styleName} -> expected counterpart ${codeVar}: ${
+      codeVars[codeVar] ?? "(no code var)"
+    }`,
+  );
 }
 lines.push("");
-lines.push(`## In code but not in Figma export (out of PoC scope): ${unmappedCodeVars.length}`);
+lines.push(
+  `## In code but not in Figma export (out of PoC scope): ${unmappedCodeVars.length}`,
+);
 lines.push(unmappedCodeVars.join(", "));
 lines.push("");
 

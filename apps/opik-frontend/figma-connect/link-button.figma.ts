@@ -19,8 +19,12 @@ const disabled = instance.getEnum("State", {
 
 const showIconLeft = instance.getBoolean("IconLeft");
 const showIconRight = instance.getBoolean("IconRight");
-const iconLeft = showIconLeft ? instance.getInstanceSwap("↳ IconLeft-Instance") : null;
-const iconRight = showIconRight ? instance.getInstanceSwap("↳ IconRight-Instance") : null;
+const iconLeft = showIconLeft
+  ? instance.getInstanceSwap("↳ IconLeft-Instance")
+  : null;
+const iconRight = showIconRight
+  ? instance.getInstanceSwap("↳ IconRight-Instance")
+  : null;
 let iconLeftCode;
 if (iconLeft && iconLeft.type === "INSTANCE") {
   iconLeftCode = iconLeft.executeTemplate().example;
@@ -34,7 +38,11 @@ const texts = instance.findLayers((n) => n.type === "TEXT");
 const label = texts[0] ? texts[0].textContent : "Label";
 
 export default {
-  example: figma.code`<Button variant="link" size="${size}"${disabled ? " disabled" : ""}>${iconLeftCode ? figma.code`${iconLeftCode} ` : ""}${label}${iconRightCode ? figma.code` ${iconRightCode}` : ""}</Button>`,
+  example: figma.code`<Button variant="link" size="${size}"${
+    disabled ? " disabled" : ""
+  }>${iconLeftCode ? figma.code`${iconLeftCode} ` : ""}${label}${
+    iconRightCode ? figma.code` ${iconRightCode}` : ""
+  }</Button>`,
   imports: ['import { Button } from "@/ui/button"'],
   id: "link-button",
   metadata: { nestable: true },

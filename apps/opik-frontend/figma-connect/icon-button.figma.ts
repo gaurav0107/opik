@@ -33,7 +33,11 @@ if (icon && icon.type === "INSTANCE") {
 }
 
 export default {
-  example: figma.code`<Button variant="${variant}" size="${size}"${badge ? " badge" : ""}${disabled ? " disabled" : ""}>${iconCode ? figma.code`${iconCode}` : ""}</Button>`,
+  example: figma.code`<Button variant="${variant}" size="${size}"${
+    badge ? " badge" : ""
+  }${disabled ? " disabled" : ""}>${
+    iconCode ? figma.code`${iconCode}` : ""
+  }</Button>`,
   imports: ['import { Button } from "@/ui/button"'],
   id: "icon-button",
   metadata: { nestable: true },

@@ -23,7 +23,9 @@ const variant = instance.getEnum("Color", {
 const showIconLeft = instance.getBoolean("ShowIconLeft");
 const showIconRight = instance.getBoolean("ShowIconRight");
 const iconLeft = showIconLeft ? instance.getInstanceSwap("↳ IconLeft") : null;
-const iconRight = showIconRight ? instance.getInstanceSwap("↳ IconRight") : null;
+const iconRight = showIconRight
+  ? instance.getInstanceSwap("↳ IconRight")
+  : null;
 let iconLeftCode;
 if (iconLeft && iconLeft.type === "INSTANCE") {
   iconLeftCode = iconLeft.executeTemplate().example;
@@ -37,7 +39,9 @@ const texts = instance.findLayers((n) => n.type === "TEXT");
 const label = texts[0] ? texts[0].textContent : "Tag";
 
 export default {
-  example: figma.code`<Tag variant="${variant}">${iconLeftCode ? figma.code`${iconLeftCode} ` : ""}${label}${iconRightCode ? figma.code` ${iconRightCode}` : ""}</Tag>`,
+  example: figma.code`<Tag variant="${variant}">${
+    iconLeftCode ? figma.code`${iconLeftCode} ` : ""
+  }${label}${iconRightCode ? figma.code` ${iconRightCode}` : ""}</Tag>`,
   imports: ['import { Tag } from "@/ui/tag"'],
   id: "tag",
   metadata: { nestable: true },

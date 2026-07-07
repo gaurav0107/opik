@@ -33,7 +33,9 @@ export default {
   <Label>${labelText}</Label>
   <Input dimension="${dimension}"${disabled ? " disabled" : ""} />
 </div>`
-    : figma.code`<Input dimension="${dimension}"${disabled ? " disabled" : ""} />`,
+    : figma.code`<Input dimension="${dimension}"${
+        disabled ? " disabled" : ""
+      } />`,
   imports: [
     'import { Input } from "@/ui/input"',
     'import { Label } from "@/ui/label"',
