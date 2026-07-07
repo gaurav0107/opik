@@ -1,0 +1,31 @@
+/**
+ * AUTO-GENERATED — DO NOT EDIT.
+ * Source: Figma "Opik Design System" styles, exported to design-tokens/tokens.json (DTCG).
+ * Rebuild with: npm run tokens:build
+ *
+ * PoC (OPIK-7260): this file is NOT imported into the build. It exists to be
+ * reconciled against the hand-maintained tokens in src/main.scss.
+ */
+
+:root {
+  --comet-black: #191a1c;
+  --comet-white: #ffffff;
+  --comet-foreground: #373d4d;
+  --tailwind-border: #e2e8f0;
+  --tailwind-light-slate: #94a3b8;
+  --tailwind-muted-slate: #64748b;
+  --tailwind-soft-background: #fcfcfd;
+  --tailwind-primary-foreground: #f8fafc;
+  --tailwind-disabled: #f3f4f6;
+  --tailwind-foreground-secondary: #030712;
+  --charts-purple-dark: #491b7e;
+  --charts-purple-light: #efe2fd;
+  --charts-green-dark: #295747;
+  --charts-green-light: #dafbf0;
+  --title-xsmall: 500 16px/20px Inter;
+  --body-small: 400 14px/20px Inter;
+  --body-small-accented: 500 14px/20px Inter;
+  --body-xsmall: 400 12px/16px Inter;
+  --body-xsmall-accented: 500 12px/16px Inter;
+  --shadow-small: 0px 1px 2px 0px #0000000D;
+}
