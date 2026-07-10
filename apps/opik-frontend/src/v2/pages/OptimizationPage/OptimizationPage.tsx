@@ -243,6 +243,7 @@ const OptimizationPage: React.FC = () => {
                 bestCandidateId={bestCandidate?.candidateId}
                 objectiveName={optimization?.objective_name}
                 status={optimization?.status}
+                optimizationCreatedAt={optimization?.created_at}
                 onTrialClick={handleTrialClick}
                 isTestSuite={isTestSuite}
                 inProgressInfo={inProgressInfo}

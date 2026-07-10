@@ -6,7 +6,7 @@ import { Optimization } from "@/types/optimizations";
 import useOptimizationStudioLogs from "@/api/optimizations/useOptimizationStudioLogs";
 import { convertTerminalOutputToHtml } from "@/lib/terminalOutput";
 import OptimizationLogsFullscreenDialog from "@/v2/pages-shared/optimizations/OptimizationLogs/OptimizationLogsFullscreenDialog";
-import { extractErrorFromLogs } from "./runError";
+import { getRunErrorMessage } from "./runError";
 
 type RunErrorPanelProps = {
   optimization: Optimization;
@@ -26,8 +26,9 @@ const RunErrorPanel: React.FC<RunErrorPanelProps> = ({ optimization }) => {
 
   const logContent = data?.content ?? "";
   const logsFailedToLoad = isError && !logContent;
+  // High-level message authored by the backend; raw detail lives behind "View logs".
   const errorMessage = useMemo(
-    () => extractErrorFromLogs(logContent),
+    () => getRunErrorMessage(logContent),
     [logContent],
   );
   const logHtml = useMemo(
@@ -45,10 +46,9 @@ const RunErrorPanel: React.FC<RunErrorPanelProps> = ({ optimization }) => {
           </h3>
         </div>
         <p className="comet-body-s whitespace-pre-wrap break-words text-foreground">
-          {errorMessage ??
-            (logsFailedToLoad
-              ? "The run ended with an error, but the logs could not be loaded."
-              : "The run ended with an error. Open the logs for details.")}
+          {logsFailedToLoad
+            ? "The run ended with an error, but the logs could not be loaded."
+            : errorMessage}
         </p>
         {logContent && (
           <Button
